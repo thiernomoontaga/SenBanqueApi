@@ -11,15 +11,21 @@ services:
       - APP_ENV=production
       - APP_DEBUG=false
     volumes:
-      - .:/var/www/html
-      - /var/www/html/vendor
+      - .:/var/www/html                  # Code source
+      - /var/www/html/vendor             # Vendor (dépendances)
+      - ./storage:/var/www/html/storage  # Persistance logs, cache, clés Passport
+
     depends_on:
       db:
         condition: service_healthy
+
+    # Commandes artisan à exécuter au démarrage
     command: >
       sh -c "
+        php artisan key:generate &&
         php artisan migrate --force &&
         php artisan db:seed --force &&
+        php artisan passport:keys --force &&
         php artisan serve --host=0.0.0.0 --port=8000
       "
 
@@ -41,5 +47,3 @@ services:
 
 volumes:
   postgres_data:
-
-

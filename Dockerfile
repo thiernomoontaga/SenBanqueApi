@@ -30,8 +30,7 @@ WORKDIR /var/www/html
 COPY --from=composer-build /app /var/www/html
 
 # Copier les clés OAuth générées localement
-COPY storage/oauth-private.key storage/
-COPY storage/oauth-public.key storage/
+
 
 # Créer les répertoires nécessaires
 RUN mkdir -p storage/framework/{cache,data,sessions,testing,views} \
